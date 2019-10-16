@@ -14,6 +14,7 @@ class m191008_155942_create_table_tags extends Migration
         $this->createTable('tags',[
             'id' => $this->primaryKey(),
             'name' => $this->string(),
+            'slug' => $this->string()
         ]);
     }
 

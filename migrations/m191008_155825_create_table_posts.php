@@ -7,45 +7,57 @@ use yii\db\Migration;
  */
 class m191008_155825_create_table_posts extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function safeUp()
+    public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('posts', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'content' => $this->text(),
-            'is_published' => $this->boolean()->notNull(),
-            'is_deleted' => $this->boolean()->notNull()->defaultValue('FALSE'),
-            'published_at' => $this->timestamp(),
+            'status' => $this->boolean()->notNull(),
             'user_id' => $this->integer()->notNull(),
+            'category_id' => $this->integer()->notNull(),
             'created_at' => $this->timestamp()->defaultExpression('NOW()'),
             'updated_at' => $this->timestamp()->append('ON UPDATE NOW()'),
             'deleted_at' => $this->timestamp(),
-        ]);
-    }
+            'published_at' => $this->timestamp(),
+        ], $tableOptions);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function safeDown()
-    {
-       $this->dropTable('posts');
-    }
+        $this->createIndex(
+            'idx-posts-user_id',
+            'posts',
+            'user_id'
+        );
 
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
+        $this->addForeignKey(
+            'fk-posts-user_id',
+            'posts',
+            'user_id',
+            'users',
+            'id'
+        );
 
+        $this->createIndex(
+            'idx-posts-category-id',
+            'posts',
+            'category_id'
+        );
+
+        $this->addForeignKey(
+            'fk-posts-category_id',
+            'posts',
+            'category_id',
+            'categories',
+            'id'
+        );
     }
 
     public function down()
     {
-        echo "m191008_155825_create_table_posts cannot be reverted.\n";
-
-        return false;
+       $this->dropTable('posts');
     }
-    */
 }

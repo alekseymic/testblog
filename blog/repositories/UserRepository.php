@@ -22,4 +22,11 @@ class UserRepository
     {
         return User::find()->andWhere(['email'=>$email])->one();
     }
+
+    public function save(User $user)
+    {
+        if (!$user->save()) {
+            throw new \RuntimeException('Saving error');
+        }
+    }
 }

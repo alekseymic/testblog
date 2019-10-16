@@ -27,6 +27,11 @@ use yii\db\ActiveRecord;
  */
 class User extends ActiveRecord
 {
+    public static function tableName()
+    {
+        return '{{%users}}';
+    }
+
     const STATUS_ACTIVE=1;
     const STATUS_INACTIVE=0;
 
