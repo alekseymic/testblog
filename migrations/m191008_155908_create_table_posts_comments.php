@@ -11,7 +11,11 @@ class m191008_155908_create_table_posts_comments extends Migration
     public function up()
     {
 
-//      TODO:post_attachemnts table?
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+//      TODO:comment_attachemnts table?
         $this->createTable('post_comments', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
@@ -20,7 +24,7 @@ class m191008_155908_create_table_posts_comments extends Migration
             'parent_id' => $this->integer()->notNull(),
             'content' => $this->text(),
 
-        ]);
+        ], $tableOptions);
 
         $this->createIndex(
             'idx-post_comments-user_id',

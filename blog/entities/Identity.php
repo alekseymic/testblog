@@ -8,7 +8,7 @@ use app\blog\repositories\UserRepository;
 use Yii;
 use yii\web\IdentityInterface;
 
-class Identity implements IdentityInterface, UserCredentialsInterface
+class Identity implements IdentityInterface
 {
     private $user;
 

@@ -21,10 +21,10 @@ class m191008_155825_create_table_posts extends Migration
             'status' => $this->boolean()->notNull(),
             'user_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
-            'created_at' => $this->timestamp()->defaultExpression('NOW()'),
-            'updated_at' => $this->timestamp()->append('ON UPDATE NOW()'),
-            'deleted_at' => $this->timestamp(),
-            'published_at' => $this->timestamp(),
+            'created_at' => $this->integer()->unsigned()->notNull(),
+            'updated_at' => $this->integer()->unsigned()->notNull(),
+            'deleted_at' => $this->integer()->unsigned()->defaultValue(0),
+            'published_at' => $this->integer()->unsigned(),
         ], $tableOptions);
 
         $this->createIndex(

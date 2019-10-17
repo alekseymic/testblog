@@ -21,8 +21,10 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\blog\entities\Identity',
             'enableAutoLogin' => true,
+            'identityCookie' => ['name' => '_identity', 'httpOnly' => true],
+            'loginUrl' => ['auth/login']
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -54,7 +56,8 @@ $config = [
                 '' => 'site/index',
 
                 '<_a:login|logout>' => 'auth/<_a>',
-                '<action>' => 'site/<action>',
+                '<_a:about|contact>' => 'site/<_a>',
+//                '<action>' => 'site/<action>',
 
                 '<_c:[\w\-]+>' => '<_c>/index',
                 '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',

@@ -7,7 +7,7 @@ namespace app\blog\forms;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
-class AttachmentsForm extends Model
+class TestFileUploadForm extends Model
 {
     /**
      * @var UploadedFile[]
@@ -25,7 +25,7 @@ class AttachmentsForm extends Model
     {
         if ($this->validate()) {
             foreach ($this->imageFiles as $file) {
-                $file->saveAs(__DIR__.'/../uploads/'. $file->baseName . '.' . $file->extension);
+                $file->saveAs(__DIR__.'/../uploads/' . $file->baseName . '.' . $file->extension);
             }
             return true;
         } else {

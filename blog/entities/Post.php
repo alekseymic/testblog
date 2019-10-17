@@ -62,6 +62,12 @@ class Post extends ActiveRecord
     }
 
 
+    public function getTags()
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])
+            ->viaTable('post_tags', ['post_id' =>'id']);
+    }
+
 
     public static function tableName()
     {

@@ -1,9 +1,11 @@
 <?php
 
+namespace app\controllers;
 
 use app\blog\entities\Identity;
 use app\blog\forms\SignupForm;
 use app\blog\services\SignupService;
+use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -25,17 +27,10 @@ class SignupController extends Controller
                 'only' => ['signup'],
                 'rules' => [
                     [
-                        'action' => ['signup'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'signup' => ['post'],
-                ]
             ]
         ];
     }
@@ -54,6 +49,7 @@ class SignupController extends Controller
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
+        return $this->render('signup', ['model' => $form]);
     }
 
 

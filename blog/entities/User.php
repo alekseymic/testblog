@@ -39,7 +39,7 @@ class User extends ActiveRecord
     {
         $this->username=$username;
         $this->email=$email;
-        $this->password=$password;
+        $this->password_hash=$this->getPasswordHash($password);
         $this->updated_at=time();
     }
 
@@ -54,8 +54,9 @@ class User extends ActiveRecord
         $user=new static();
         $user->username=$username;
         $user->email=$email;
-        $user->password=$password;
+        $user->password_hash=$user->getPasswordHash($password);
         $user->created_at=time();
+        $user->updated_at=time();
         $user->status=self::STATUS_ACTIVE;
         $user->auth_key=Yii::$app->security->generateRandomString();
         return $user;

@@ -9,11 +9,15 @@ class m191010_150323_create_table_post_tags extends Migration
 {
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
         $this->createTable('post_tags', [
             'id' => $this->primaryKey(),
             'tag_id' => $this->integer()->notNull(),
             'post_id' => $this->integer()->notNull(),
-        ]);
+        ], $tableOptions);
         $this->createIndex(
             'idx-post_tags-tag_id',
             'post_tags',
