@@ -3,17 +3,15 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 
-use app\blog\entities\Category;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use app\blog\forms\PostForm;
 
 $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
 
     <?php $form = ActiveForm::begin([
         'id' => 'post-form',
@@ -27,18 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'title')->textInput(['autofocus' => true]) ?>
 
     <?= $form->field($model, 'content')->textarea(['rows'=>10]) ?>
-    <?php
-        $list=[];
-        $categories=Category::find()->all();
-        foreach ($categories as $category) {
-            $list[]=$category->name;
-        }
+    <?= $form->field($model, 'category_name')->dropDownList($model->getCategories()) ?>
 
-
-
-        ?>
-    <?= $form->field($model, 'category_id')->dropDownList($list) ?>
-
+    <?= $form->field($model, 'tags')->textInput()?>
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
             <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

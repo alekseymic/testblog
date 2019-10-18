@@ -4,37 +4,55 @@
 namespace app\blog\services;
 
 
+use app\blog\entities\Category;
 use app\blog\entities\Post;
+use app\blog\entities\Tag;
 use app\blog\forms\PostForm;
+use app\blog\repositories\CategoryRepository;
 use app\blog\repositories\PostRepository;
+use app\blog\repositories\TagRepository;
 
 class PostManageService
 {
-    private $repository;
-    public function __construct(PostRepository $repository)
+    private $postsRepo;
+    private $tagsRepo;
+    private $catsRepo;
+
+    public function __construct(PostRepository $postsRepo, TagRepository $tagsRepo, CategoryRepository $catsRepo)
     {
-        $this->repository=$repository;
+        $this->postsRepo=$postsRepo;
+        $this->tagsRepo=$tagsRepo;
+        $this->catsRepo=$catsRepo;
     }
 
     public function create(PostForm $form)
     {
-        $post=Post::create($form->title, $form->content, $form->status, $form->category_id);
-        $this->repository->save($post);
 
+        $post=Post::create($form->title, $form->content, $form->status, $form->category_name);
+        foreach ($form->tags as $tagName) {
+            if (!$this->tagsRepo->isExistByName($tagName)) {
+                $tag = Tag::create($tagName);
+                $this->tagsRepo->save($tag);
+            } else {
+                $tag=$this->tagsRepo->findTagByName($tagName);
+            }
+                $post->assignTag($tag);
+        }
+        $this->postsRepo->save($post);
     }
 
     public function edit($id, PostForm $form)
     {
-        $post=$this->repository->findPostById($id);
+        $post=$this->postsRepo->findPostById($id);
         $post->edit($form->title, $form->content, $form->status, $form->category_id);
-        $this->repository->save($post);
+        $this->postsRepo->save($post);
     }
 
     public function delete($id)
     {
-        $post=$this->repository->findPostById($id);
+        $post=$this->postsRepo->findPostById($id);
         $post->changeStatus(Post::STATUS_DELETED);
-        $this->repository->save($post);
+        $this->postsRepo->save($post);
     }
 
 

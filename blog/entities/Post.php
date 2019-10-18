@@ -2,6 +2,8 @@
 
 namespace app\blog\entities;
 
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsTrait;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -16,12 +18,14 @@ use yii\db\ActiveRecord;
  * @property    $deleted_at
  * @property    $category_id
  * @property    $published_at
+ * @property Tag[] $tags
  * @package app\blog\entities
  */
 class Post extends ActiveRecord
 {
+    use SaveRelationsTrait; // Optional
     const STATUS_ACTIVE=1;
-    const STATUS_INATIVE=0;
+    const STATUS_INACTIVE=0;
     const STATUS_DELETED=2;
 
     public static function create(string $title, string $content, int $status, int $categoryId):self
@@ -30,6 +34,7 @@ class Post extends ActiveRecord
         $post->title=$title;
         $post->content=$content;
         $post->created_at=time();
+        $post->updated_at=time();
         $post->user_id=Yii::$app->getUser();
         $post->status=$status;
         $post->category_id=$categoryId;
@@ -61,16 +66,50 @@ class Post extends ActiveRecord
         $this->published_at=time();
     }
 
-
+    public function assignTag($tag)
+    {
+        $tags=$this->tags;
+        $tags[]=$tag;
+        $this->tags=$tags;
+    }
+    
     public function getTags()
     {
         return $this->hasMany(Tag::class, ['id' => 'tag_id'])
-            ->viaTable('post_tags', ['post_id' =>'id']);
+            ->viaTable('post_tags', ['post_id'=> 'id']);
     }
 
+//    public function getTagAssignments()
+//    {
+//        return $this->hasMany(TagAssignment::class, ['post_id' => 'id']);
+//    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id'=>'category_id']);
+    }
 
     public static function tableName()
     {
         return '{{%posts}}';
+    }
+
+    public function transactions()
+    {
+        return [
+            self::SCENARIO_DEFAULT => self::OP_ALL,
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class'     => SaveRelationsBehavior::class,
+                'relations' => [
+                    'tags'
+                ]
+            ]
+        ];
     }
 }

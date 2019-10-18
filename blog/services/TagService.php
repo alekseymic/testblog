@@ -20,14 +20,14 @@ class TagService
 
     public function create(TagForm $form)
     {
-        $tag=Tag::create($form->name, $form->slug);
+        $tag=Tag::create($form->name);
         $this->repository->save($tag);
     }
 
     public function edit($id, TagForm $form)
     {
         $tag=$this->repository->findTagById($id);
-        $tag->edit($form->name, $form->slug);
+        $tag->edit($form->name);
         $this->repository->save($tag);
     }
 

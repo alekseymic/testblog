@@ -9,6 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * Class Category
  *
+ * @property integer $id
  * @property string $name
  * @property string $description
  * @property string $slug

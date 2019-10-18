@@ -13,14 +13,19 @@ class TagRepository
         return Tag::find()->andWhere(['id' => $id])->one();
     }
 
-    public function findTagByName($name): Tag
+    public function findTagByName($name): ?Tag
     {
-        return Tag::find()->andWhere(['name' => $name])->one();
+        return Tag::findOne(['name' => $name]);
     }
 
     public function findTagBySlug($slug): Tag
     {
         return Tag::find()->andWhere(['slug' => $slug])->one();
+    }
+
+    public function isExistByName($name)
+    {
+        return Tag::find()->where(['name'=>$name])->exists();
     }
 
     public function save(Tag $tag)

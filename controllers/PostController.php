@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['create', 'update', 'delete'],
                 'rules' => [
                     [
@@ -27,7 +27,7 @@ class PostController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'create' => ['post', 'get'],
                     'update' => ['post'],
