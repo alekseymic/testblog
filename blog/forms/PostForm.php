@@ -7,6 +7,7 @@ namespace app\blog\forms;
 use app\blog\entities\Category;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 class PostForm extends Model
 {
@@ -16,6 +17,10 @@ class PostForm extends Model
     public $category_name;
     public $status=1;
     public $tags;
+    /**
+     * @var UploadedFile[]
+     */
+    public $files;
     public function __construct($config = [])
     {
 //        $this->innerForms[]=new AttachmentsForm();
@@ -43,6 +48,7 @@ class PostForm extends Model
     public function rules()
     {
         return [
+            [['files'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
             [['title', 'category_name'],'required'],
             ['tags', function($attr, $param){
                 $this->tags=array_map('trim', explode(',', $this->tags));
@@ -51,6 +57,18 @@ class PostForm extends Model
                 }
             }],
         ];
+    }
+
+    public function uploadFiles()
+    {
+        $filenames=[];
+        foreach ($this->files as $file) {
+            $filename=$file->baseName . '.' . $file->extension;
+            if ($file->saveAs('@web/web/uploads/'. $filename)) {
+                $filenames[]=['name'=>$file->baseName, 'path'=>$filename];
+            }
+        }
+        return ArrayHelper::map($filenames,'name','path');
     }
 
 }

@@ -21,7 +21,7 @@ class m191008_155900_create_table_posts_attachments extends Migration
             'id'=> $this->primaryKey(),
             'post_id' => $this->integer(),
             'name' => $this->string(),
-            'file' => $this->string()
+            'path' => $this->string()
         ], $tableOptions);
 
         $this->createIndex(

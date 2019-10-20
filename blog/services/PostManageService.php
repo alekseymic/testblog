@@ -8,6 +8,7 @@ use app\blog\entities\Category;
 use app\blog\entities\Post;
 use app\blog\entities\Tag;
 use app\blog\forms\PostForm;
+use app\blog\repositories\AttachmentRepository;
 use app\blog\repositories\CategoryRepository;
 use app\blog\repositories\PostRepository;
 use app\blog\repositories\TagRepository;
@@ -17,12 +18,14 @@ class PostManageService
     private $postsRepo;
     private $tagsRepo;
     private $catsRepo;
+    private $attachmentsRepo;
 
-    public function __construct(PostRepository $postsRepo, TagRepository $tagsRepo, CategoryRepository $catsRepo)
+    public function __construct(PostRepository $postsRepo, TagRepository $tagsRepo, CategoryRepository $catsRepo, AttachmentRepository $attachmentsRepo)
     {
         $this->postsRepo=$postsRepo;
         $this->tagsRepo=$tagsRepo;
         $this->catsRepo=$catsRepo;
+        $this->attachmentsRepo=$attachmentsRepo;
     }
 
     public function create(PostForm $form)
@@ -34,12 +37,18 @@ class PostManageService
                 $tag = Tag::create($tagName);
                 $this->tagsRepo->save($tag);
             } else {
-                $tag=$this->tagsRepo->findTagByName($tagName);
+                $tag = $this->tagsRepo->findTagByName($tagName);
             }
-                $post->assignTag($tag);
+            $post->assignTag($tag);
+        }
+
+        foreach ($form->uploadFiles() as $file=>$path) {
+            $post->addAttachment($file,$path);
         }
         $this->postsRepo->save($post);
     }
+
+
 
     public function edit($id, PostForm $form)
     {

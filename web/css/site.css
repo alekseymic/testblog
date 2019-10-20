@@ -90,6 +90,10 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
+
+
+
+
 /* align the logout "link" (button in form) of the navbar */
 .nav li > form > button.logout {
     padding: 15px;
@@ -113,3 +117,22 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.post__content {
+    margin-top:15px;
+    margin-bottom:20px;
+}
+.card{
+
+    text-align: center;
+}
+.post__image {
+    cursor:pointer;
+    width:18rem;
+    max-height: 18rem;
+}
+
+.post__image-caption{
+    font-size: 1em;
+}
+

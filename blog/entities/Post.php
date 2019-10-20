@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property    $category_id
  * @property    $published_at
  * @property Tag[] $tags
+ * @property Attachment[] $attachments
  * @package app\blog\entities
  */
 class Post extends ActiveRecord
@@ -35,7 +36,7 @@ class Post extends ActiveRecord
         $post->content=$content;
         $post->created_at=time();
         $post->updated_at=time();
-        $post->user_id=Yii::$app->getUser();
+        $post->user_id=Yii::$app->user->id;
         $post->status=$status;
         $post->category_id=$categoryId;
         return $post;
@@ -72,7 +73,14 @@ class Post extends ActiveRecord
         $tags[]=$tag;
         $this->tags=$tags;
     }
-    
+
+    public function addAttachment(string $name, string $path)
+    {
+        $attachments=$this->attachments;
+        $attachments[]=Attachment::create( $name, $path);;
+        $this->attachments=$attachments;
+    }
+
     public function getTags()
     {
         return $this->hasMany(Tag::class, ['id' => 'tag_id'])
@@ -87,6 +95,16 @@ class Post extends ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::class, ['id'=>'category_id']);
+    }
+
+    public function getAttachments()
+    {
+        return $this->hasMany(Attachment::class,['post_id'=>'id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id'=>'user_id']);
     }
 
     public static function tableName()
@@ -107,7 +125,9 @@ class Post extends ActiveRecord
             [
                 'class'     => SaveRelationsBehavior::class,
                 'relations' => [
-                    'tags'
+                    'tags',
+                    'categories',
+                    'attachments'
                 ]
             ]
         ];
