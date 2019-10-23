@@ -12,6 +12,12 @@ use app\blog\forms\ContactForm;
 class SiteController extends Controller
 {
 
+
+    public function __construct($id, $module, PostReadRepository $readRepository, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -35,6 +41,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+
         return $this->render('index');
     }
 

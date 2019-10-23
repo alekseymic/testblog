@@ -50,6 +50,7 @@ class PostForm extends Model
         return [
             [['files'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
             [['title', 'category_name'],'required'],
+            ['content', 'string'],
             ['tags', function($attr, $param){
                 $this->tags=array_map('trim', explode(',', $this->tags));
                 if (COUNT($this->tags)<2) {

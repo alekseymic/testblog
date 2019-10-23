@@ -30,7 +30,6 @@ class PostManageService
 
     public function create(PostForm $form)
     {
-
         $post=Post::create($form->title, $form->content, $form->status, $form->category_name);
         foreach ($form->tags as $tagName) {
             if (!$this->tagsRepo->isExistByName($tagName)) {
@@ -41,7 +40,6 @@ class PostManageService
             }
             $post->assignTag($tag);
         }
-
         foreach ($form->uploadFiles() as $file=>$path) {
             $post->addAttachment($file,$path);
         }

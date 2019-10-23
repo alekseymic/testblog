@@ -8,7 +8,7 @@ use app\blog\entities\Post;
 
 class PostRepository
 {
-    public function findPostById($id): Post
+    public function findPostById($id): ?Post
     {
         return Post::find()->andWhere(['id' => $id])->one();
     }
